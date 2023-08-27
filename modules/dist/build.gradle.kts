@@ -7,15 +7,15 @@ plugins {
 }
 
 bukkitResourceGenerator {
-    main = "kr.hqservice."
-    name = ""
-    apiVersion = "1.13"
+    main = "kr.hqservice.display.HQDisplayLibMain"
+    name = "HQDisplayLib"
+    apiVersion = "1.19"
     libraries = excludedRuntimeDependencies()
+    depend = listOf("HQFramework")
 }
 
 dependencies {
     compileOnly(libs.spigot.api)
     compileOnly(framework.core)
-    runtimeOnly(project(":modules:core"))
-    runtimeOnly(project(":modules:api"))
+    runtimeOnly(project(":modules:nms"))
 }

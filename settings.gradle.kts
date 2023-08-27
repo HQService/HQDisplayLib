@@ -1,4 +1,4 @@
-rootProject.name = "HQBukkitTemplate"
+rootProject.name = "HQDisplayLib"
 
 dependencyResolutionManagement {
     repositories {
