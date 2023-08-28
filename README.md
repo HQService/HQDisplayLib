@@ -1,4 +1,4 @@
-# HQDisplayLib ( for 1.19.4+ )
+# HQDisplayLib ( 1.19.4+ )
 
 ```kotlin
 repositories {
