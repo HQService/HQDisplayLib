@@ -23,7 +23,7 @@ abstract class AbstractVirtualDisplay(
             switchMetaMask()
         }
 
-    var interpolationDuration: Int = 0
+    var interpolationDuration: Int = -1
         set(value) {
             field = value
             displayService.applyInterpolationDuration(this)
