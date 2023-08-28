@@ -21,20 +21,20 @@ class NmsTextDisplayService(
     @Qualifier("base-component") private val baseComponentService: BaseComponentService
 ) : AbstractDisplayService<NmsTextDisplayWrapper>(nmsDisplayService, HQDisplayType.TextDisplay) {
     private val setTextFunction = reflectionWrapper.getFunction(getTargetClass(), "c", listOf(baseComponentService.getTargetClass()))
-    private val setTextOpacityFunction = reflectionWrapper.getFunction(getTargetClass(), "g", listOf(Float::class))
     private val setBackgroundColorFunction = reflectionWrapper.getFunction(getTargetClass(), "c", listOf(Int::class))
-    private val DATA_LINE_WIDTH_ID = reflectionWrapper.getStaticField(getTargetClass(), "aM").run {
+    private val dataLineWidthId = reflectionWrapper.getStaticField(getTargetClass(), "aM").run {
+        isAccessible = true
+        call()!!
+    }
+    private val dataTextOpacityId = reflectionWrapper.getStaticField(getTargetClass(), "aN").run {
         isAccessible = true
         call()!!
     }
 
+
     fun setText(displayWrapper: NmsTextDisplayWrapper, text: BaseComponent) {
         val baseCompWrapper = baseComponentService.wrapFromJson(ComponentSerializer.toString(text))
         setTextFunction.call(displayWrapper.getUnwrappedInstance(), baseCompWrapper.getUnwrappedInstance())
-    }
-
-    fun setTextOpacity(displayWrapper: NmsTextDisplayWrapper, opacity: Float) {
-        setTextOpacityFunction.call(displayWrapper.getUnwrappedInstance(), opacity)
     }
 
     fun setBackgroundColor(displayWrapper: NmsTextDisplayWrapper, color: Color) {
@@ -42,6 +42,10 @@ class NmsTextDisplayService(
     }
 
     fun setLineWith(displayWrapper: NmsTextDisplayWrapper, lineWidth: Int) {
-        nmsDisplayService.setEntityData(displayWrapper, DATA_LINE_WIDTH_ID, lineWidth)
+        nmsDisplayService.setEntityData(displayWrapper, dataLineWidthId, lineWidth)
+    }
+
+    fun setOpacity(displayWrapper: NmsTextDisplayWrapper, opacity: Byte) {
+        nmsDisplayService.setEntityData(displayWrapper, dataTextOpacityId, opacity)
     }
 }

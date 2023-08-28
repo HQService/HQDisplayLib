@@ -13,7 +13,11 @@ class NmsTextDisplayWrapper(
     }
 
     fun setOpacity(opacity: Float) {
-        service.setTextOpacity(this, opacity)
+        val fixedValue = (opacity * 255).run {
+            if (this < 0) 0
+            else (this % 256).toInt()
+        }
+        service.setOpacity(this, fixedValue.toByte())
     }
 
     fun setBackgroundColor(color: Color) {

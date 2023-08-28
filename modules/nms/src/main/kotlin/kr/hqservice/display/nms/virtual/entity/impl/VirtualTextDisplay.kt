@@ -22,6 +22,7 @@ class VirtualTextDisplay(
             switchMetaMask()
         }
 
+    // 1.0 ~ 0
     var opacity: Float = 1.0f
         set(value) {
             field = value
