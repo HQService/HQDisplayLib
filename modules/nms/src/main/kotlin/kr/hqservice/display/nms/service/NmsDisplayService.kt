@@ -35,27 +35,56 @@ class NmsDisplayService(
         Version.V_19.handle("network.syncher"))
     private val dataAccessorClass = reflectionWrapper.getNmsClass("DataWatcherObject",
         Version.V_19.handle("network.syncher"))
+/*
     private val dataWatcherSetFunction = dataWatcherClass.java.getMethod(
-        "b", dataAccessorClass.java, Any::class.javaObjectType
+        "b", dataAccessorClass.java, JvmType.Object::class.javaObjectType,
+    )*/
+
+    private val dataWatcherSetFunction = reflectionWrapper.getFunction(dataWatcherClass, "b",
+        listOf(dataAccessorClass, Any::class),
+        Version.V_20_FORGE.handleFunction("m_135381_") { setParameterClasses(dataAccessorClass, Any::class) }
     )
 
     private val getEntityDataFunction = reflectionWrapper.getFunction(displayClass, "getEntityData",
-        Version.V_19.handle("aj"))
-    private val DATA_INTERPOLATION_DURATION_ID = reflectionWrapper.getStaticField(displayClass, "r").run {
+        Version.V_19.handle("aj"),
+        Version.V_20_FORGE.handle("m_20088_")
+    )
+    private val DATA_INTERPOLATION_DURATION_ID = reflectionWrapper.getStaticField(displayClass, "r",
+        Version.V_20.handle("q"),
+        Version.V_20_FORGE.handle("f_268449_")
+    ).run {
         isAccessible = true
         call()!!
     }
-    private val DATA_INTERPOLATION_START_DELTA_TICKS_ID = reflectionWrapper.getStaticField(displayClass, "q").run {
+    private val DATA_INTERPOLATION_START_DELTA_TICKS_ID = reflectionWrapper.getStaticField(displayClass, "q",
+        Version.V_20.handle("p"),
+        Version.V_20_FORGE.handle("f_276329_")
+    ).run {
         isAccessible = true
         call()!!
     }
 
-    private val setPosRawFunction = reflectionWrapper.getFunction(displayClass, "p", listOf(Double::class, Double::class, Double::class))
-    private val setYRotFunction = reflectionWrapper.getFunction(displayClass, "f", listOf(Float::class))
-    private val setTransformationFunction = reflectionWrapper.getFunction(displayClass, "a", listOf(transformationClass))
-    private val setBillboardFunction = reflectionWrapper.getFunction(displayClass, "a", listOf(HQBillboard.BillboardClass))
-    private val setViewRangeFunction = reflectionWrapper.getFunction(displayClass, "g", listOf(Float::class))
-    private val setShadowRadiusFunction = reflectionWrapper.getFunction(displayClass, "h", listOf(Float::class))
+    private val setPosRawFunction = reflectionWrapper.getFunction(displayClass, "p", listOf(Double::class, Double::class, Double::class),
+        Version.V_20_FORGE.handleFunction("m_20343_") { setParameterClasses(Double::class, Double::class, Double::class) }
+    )
+    // head -> n , body -> o
+    private val setYRotFunction = reflectionWrapper.getFunction(displayClass, "f", listOf(Float::class),
+        Version.V_20_FORGE.handleFunction("m_5616_") { setParameterClasses(Float::class) }
+    )
+    private val setTransformationFunction = reflectionWrapper.getFunction(displayClass, "a", listOf(transformationClass),
+        Version.V_20_FORGE.handleFunction("m_269214_") { setParameterClasses(transformationClass) }
+    )
+    private val setBillboardFunction = reflectionWrapper.getFunction(displayClass, "a", listOf(HQBillboard.BillboardClass),
+        Version.V_20_FORGE.handleFunction("m_269423_") { setParameterClasses(HQBillboard.BillboardClass) }
+    )
+    private val setViewRangeFunction = reflectionWrapper.getFunction(displayClass, "g", listOf(Float::class),
+        Version.V_20.handleFunction("s") { setParameterClasses(Float::class) },
+        Version.V_20_FORGE.handleFunction("m_269215_") { setParameterClasses(Float::class) }
+    )
+    private val setShadowRadiusFunction = reflectionWrapper.getFunction(displayClass, "h", listOf(Float::class),
+        Version.V_20.handleFunction("t") { setParameterClasses(Float::class) },
+        Version.V_20_FORGE.handleFunction("m_269526_") { setParameterClasses(Float::class) }
+    )
 
     internal fun initializeLocation(virtualDisplay: AbstractVirtualDisplay, location: Location) {
         setPosRawFunction.call(virtualDisplay.getEntity(), location.x, location.y, location.z)
@@ -64,7 +93,7 @@ class NmsDisplayService(
 
     internal fun setEntityData(nmsWrapper: NmsDisplayWrapper, watcherObject: Any, obj: Any) {
         val data = getEntityDataFunction.call(nmsWrapper.getUnwrappedInstance())
-        dataWatcherSetFunction.invoke(data, watcherObject, obj)
+        dataWatcherSetFunction.call(data, watcherObject, obj)
     }
 
     internal fun applyTransformation(virtualDisplay: AbstractVirtualDisplay) {
@@ -73,12 +102,12 @@ class NmsDisplayService(
 
     internal fun applyInterpolationDuration(virtualDisplay: AbstractVirtualDisplay) {
         val data = getEntityDataFunction.call(virtualDisplay.getEntity())
-        dataWatcherSetFunction.invoke(data, DATA_INTERPOLATION_DURATION_ID, virtualDisplay.interpolationDuration)
+        dataWatcherSetFunction.call(data, DATA_INTERPOLATION_DURATION_ID, virtualDisplay.interpolationDuration)
     }
 
     internal fun applyInterpolationDelay(virtualDisplay: AbstractVirtualDisplay) {
         val data = getEntityDataFunction.call(virtualDisplay.getEntity())
-        dataWatcherSetFunction.invoke(data, DATA_INTERPOLATION_START_DELTA_TICKS_ID, virtualDisplay.interpolationDuration)
+        dataWatcherSetFunction.call(data, DATA_INTERPOLATION_START_DELTA_TICKS_ID, virtualDisplay.interpolationDuration)
     }
 
     internal fun applyBillboard(virtualDisplay: AbstractVirtualDisplay) {

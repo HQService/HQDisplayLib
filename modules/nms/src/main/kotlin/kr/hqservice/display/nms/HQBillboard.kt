@@ -16,7 +16,8 @@ sealed class HQBillboard(
             "Display\$BillboardConstraints",
             Version.V_19.handle("world.entity")
         )
-        private val valueOfFunc = reflectionWrapper.getFunction(BillboardClass, FunctionType("valueOf", null, listOf(String::class), true))
+        private val valueOfFunc = reflectionWrapper.getFunction(BillboardClass,
+            FunctionType("valueOf", null, listOf(String::class), true))
         private fun nmsValueOf(nmsName: String): Any {
             return valueOfFunc.call(nmsName)!!
         }

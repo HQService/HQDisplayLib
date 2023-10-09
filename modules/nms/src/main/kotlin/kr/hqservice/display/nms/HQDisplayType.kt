@@ -22,7 +22,8 @@ sealed class HQDisplayType<T : NmsDisplayWrapper>(
         )
     }
 
-    object TextDisplay : HQDisplayType<NmsTextDisplayWrapper>(reflectionWrapper.getStaticField(EntityTypeClass,"aX").call()!!, NmsTextDisplayWrapper::class)
+    object TextDisplay : HQDisplayType<NmsTextDisplayWrapper>(
+        reflectionWrapper.getStaticField(EntityTypeClass,"aX", Version.V_20_FORGE.handleFunction("f_268607_")).call()!!, NmsTextDisplayWrapper::class)
     //object ItemDisplay: HQDisplayType<NmsTextDisplayWrapper>(nmsValueOf("ITEM_DISPLAY"), NmsTextDisplayWrapper::class)
     //object BlockDisplay : HQDisplayType<NmsTextDisplayWrapper>(nmsValueOf("BLOCK_DISPLAY"), NmsTextDisplayWrapper::class)
 
