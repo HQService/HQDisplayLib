@@ -21,17 +21,29 @@ class NmsTextDisplayService(
     reflectionWrapper: NmsReflectionWrapper,
     @Qualifier("base-component") private val baseComponentService: BaseComponentService
 ) : AbstractDisplayService<NmsTextDisplayWrapper>(nmsDisplayService, HQDisplayType.TextDisplay) {
-    private val setTextFunction = reflectionWrapper.getFunction(getTargetClass(), "c", listOf(baseComponentService.getTargetClass())
-        ,Version.V_20_FORGE.handleFunction("m_269037_") { setParameterClasses(baseComponentService.getTargetClass()) }
+
+    private val setTextFunction = reflectionWrapper.getFunction(getTargetClass(), "setText", listOf(baseComponentService.getTargetClass()),
+        Version.V_19.handleFunction("c") { setParameterClasses(baseComponentService.getTargetClass()) },
+        Version.V_19_FORGE.handleFunction("m_269037_") { setParameterClasses(baseComponentService.getTargetClass()) }
     )
-    private val setBackgroundColorFunction = reflectionWrapper.getFunction(getTargetClass(), "c", listOf(Int::class), Version.V_20_FORGE.handleFunction("m_269001_") { setParameterClasses(Int::class) })
-    private val dataLineWidthId = reflectionWrapper.getStaticField(getTargetClass(), "aM", Version.V_20_FORGE.handle("f_268476_")).run {
+    private val setBackgroundColorFunction = reflectionWrapper.getFunction(getTargetClass(), "setBackgroundColor", listOf(Int::class),
+        Version.V_19.handleFunction("c") { setParameterClasses(Int::class) },
+        Version.V_19_FORGE.handleFunction("m_269001_") { setParameterClasses(Int::class) }
+    )
+    private val DATA_LINE_WIDTH_ID = reflectionWrapper.getStaticField(getTargetClass(), "DATA_LINE_WIDTH_ID",
+        Version.V_19.handle("aL"),
+        Version.V_20.handle("aM"),
+        Version.V_20_2.handle("aN"),
+        Version.V_19_FORGE.handle("f_268476_")
+    ).run {
         isAccessible = true
         call()!!
     }
-    private val dataTextOpacityId = reflectionWrapper.getStaticField(getTargetClass(), "aN",
+    private val DATA_TEXT_OPACITY_ID = reflectionWrapper.getStaticField(getTargetClass(), "DATA_TEXT_OPACITY_ID",
+        Version.V_19.handle("aN"),
         Version.V_20.handle("aO"),
-        Version.V_20_FORGE.handle("f_268481_")
+        Version.V_20_2.handle("aP"),
+        Version.V_19_FORGE.handle("f_268481_")
     ).run {
         isAccessible = true
         call()!!
@@ -52,10 +64,10 @@ class NmsTextDisplayService(
     }
 
     fun setLineWith(displayWrapper: NmsTextDisplayWrapper, lineWidth: Int) {
-        nmsDisplayService.setEntityData(displayWrapper, dataLineWidthId, lineWidth)
+        nmsDisplayService.setEntityData(displayWrapper, DATA_LINE_WIDTH_ID, lineWidth)
     }
 
     fun setOpacity(displayWrapper: NmsTextDisplayWrapper, opacity: Byte) {
-        nmsDisplayService.setEntityData(displayWrapper, dataTextOpacityId, opacity)
+        nmsDisplayService.setEntityData(displayWrapper, DATA_TEXT_OPACITY_ID, opacity)
     }
 }
