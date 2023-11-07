@@ -16,14 +16,15 @@ sealed class HQDisplayType<T : NmsDisplayWrapper>(
 ) : NmsWrapper {
     companion object : KoinComponent {
         private val reflectionWrapper: NmsReflectionWrapper by inject()
-        internal val EntityTypeClass = reflectionWrapper.getNmsClass(
-            "EntityTypes",
+        internal val EntityTypeClass = reflectionWrapper.getNmsClass("EntityTypes",
             Version.V_19.handle("world.entity")
         )
     }
 
-    object TextDisplay : HQDisplayType<NmsTextDisplayWrapper>(
-        reflectionWrapper.getStaticField(EntityTypeClass,"aX", Version.V_20_FORGE.handleFunction("f_268607_")).call()!!, NmsTextDisplayWrapper::class)
+    object TextDisplay : HQDisplayType<NmsTextDisplayWrapper>(reflectionWrapper.getStaticField(EntityTypeClass, "TEXT_DISPLAY",
+        Version.V_19.handleFunction("aX"),
+        Version.V_19_FORGE.handleFunction("f_268607_")
+    ).call()!!, NmsTextDisplayWrapper::class)
     //object ItemDisplay: HQDisplayType<NmsTextDisplayWrapper>(nmsValueOf("ITEM_DISPLAY"), NmsTextDisplayWrapper::class)
     //object BlockDisplay : HQDisplayType<NmsTextDisplayWrapper>(nmsValueOf("BLOCK_DISPLAY"), NmsTextDisplayWrapper::class)
 

@@ -25,65 +25,77 @@ class NmsDisplayService(
     private val reflectionWrapper: NmsReflectionWrapper,
     @Qualifier("nms.world") private val worldService: WorldService,
 ) : NmsEntityService<NmsDisplayWrapper> {
-    private val displayClass = reflectionWrapper.getNmsClass(
-        "Display",
+
+    private val displayClass = reflectionWrapper.getNmsClass("Display",
         Version.V_19.handle("world.entity")
     )
-
     private val transformationClass = Class.forName("com.mojang.math.Transformation").kotlin
     private val dataWatcherClass = reflectionWrapper.getNmsClass("DataWatcher",
-        Version.V_19.handle("network.syncher"))
+        Version.V_19.handle("network.syncher")
+    )
     private val dataAccessorClass = reflectionWrapper.getNmsClass("DataWatcherObject",
-        Version.V_19.handle("network.syncher"))
-/*
+        Version.V_19.handle("network.syncher")
+    )
+    /*
     private val dataWatcherSetFunction = dataWatcherClass.java.getMethod(
         "b", dataAccessorClass.java, JvmType.Object::class.javaObjectType,
     )*/
-
-    private val dataWatcherSetFunction = reflectionWrapper.getFunction(dataWatcherClass, "b",
-        listOf(dataAccessorClass, Any::class),
-        Version.V_20_FORGE.handleFunction("m_135381_") { setParameterClasses(dataAccessorClass, Any::class) }
+    private val dataWatcherSetFunction = reflectionWrapper.getFunction(dataWatcherClass, "set", listOf(dataAccessorClass, Any::class),
+        Version.V_19.handleFunction("b") { setParameterClasses(dataAccessorClass, Any::class) },
+        Version.V_19_FORGE.handleFunction("m_135381_") { setParameterClasses(dataAccessorClass, Any::class) }
     )
-
     private val getEntityDataFunction = reflectionWrapper.getFunction(displayClass, "getEntityData",
         Version.V_19.handle("aj"),
-        Version.V_20_FORGE.handle("m_20088_")
+        Version.V_20_2.handle("al"),
+        Version.V_19_FORGE.handle("m_20088_")
     )
-    private val DATA_INTERPOLATION_DURATION_ID = reflectionWrapper.getStaticField(displayClass, "r",
+    private val DATA_INTERPOLATION_DURATION_ID = reflectionWrapper.getStaticField(displayClass, "DATA_INTERPOLATION_DURATION_ID",
+        Version.V_19.handle("r"),
         Version.V_20.handle("q"),
-        Version.V_20_FORGE.handle("f_268449_")
+        Version.V_19_FORGE.handle("f_268449_"),
+        Version.V_20_2_FORGE.handle("f_290650_")
     ).run {
         isAccessible = true
         call()!!
     }
-    private val DATA_INTERPOLATION_START_DELTA_TICKS_ID = reflectionWrapper.getStaticField(displayClass, "q",
+    private val DATA_INTERPOLATION_START_DELTA_TICKS_ID = reflectionWrapper.getStaticField(displayClass, "DATA_INTERPOLATION_START_DELTA_TICKS_ID",
+        Version.V_19.handle("q"),
         Version.V_20.handle("p"),
-        Version.V_20_FORGE.handle("f_276329_")
+        Version.V_19_FORGE.handle("f_276329_"),
+        Version.V_20_2_FORGE.handle("f_291687_")
     ).run {
         isAccessible = true
         call()!!
     }
-
-    private val setPosRawFunction = reflectionWrapper.getFunction(displayClass, "p", listOf(Double::class, Double::class, Double::class),
-        Version.V_20_FORGE.handleFunction("m_20343_") { setParameterClasses(Double::class, Double::class, Double::class) }
+    private val setPosRawFunction = reflectionWrapper.getFunction(displayClass, "setPosRaw", listOf(Double::class, Double::class, Double::class),
+        Version.V_19.handleFunction("p") { setParameterClasses(Double::class, Double::class, Double::class) },
+        Version.V_19_FORGE.handleFunction("m_20343_") { setParameterClasses(Double::class, Double::class, Double::class) }
     )
     // head -> n , body -> o
-    private val setYRotFunction = reflectionWrapper.getFunction(displayClass, "f", listOf(Float::class),
-        Version.V_20_FORGE.handleFunction("m_5616_") { setParameterClasses(Float::class) }
+    private val setYRotFunction = reflectionWrapper.getFunction(displayClass, "setYHeadRot", listOf(Float::class),
+        Version.V_19.handleFunction("r") { setParameterClasses(Float::class) },
+        Version.V_20.handleFunction("n") { setParameterClasses(Float::class) },
+        Version.V_19_FORGE.handleFunction("m_5616_") { setParameterClasses(Float::class) }
     )
-    private val setTransformationFunction = reflectionWrapper.getFunction(displayClass, "a", listOf(transformationClass),
-        Version.V_20_FORGE.handleFunction("m_269214_") { setParameterClasses(transformationClass) }
+    private val setTransformationFunction = reflectionWrapper.getFunction(displayClass, "setTransformation", listOf(transformationClass),
+        Version.V_19.handleFunction("a") { setParameterClasses(transformationClass) },
+        Version.V_19_FORGE.handleFunction("m_269214_") { setParameterClasses(transformationClass) }
     )
-    private val setBillboardFunction = reflectionWrapper.getFunction(displayClass, "a", listOf(HQBillboard.BillboardClass),
-        Version.V_20_FORGE.handleFunction("m_269423_") { setParameterClasses(HQBillboard.BillboardClass) }
+    private val setBillboardFunction = reflectionWrapper.getFunction(displayClass, "setBillboardConstraints", listOf(HQBillboard.BillboardClass),
+        Version.V_19.handleFunction("a") { setParameterClasses(HQBillboard.BillboardClass) },
+        Version.V_19_FORGE.handleFunction("m_269423_") { setParameterClasses(HQBillboard.BillboardClass) }
     )
-    private val setViewRangeFunction = reflectionWrapper.getFunction(displayClass, "g", listOf(Float::class),
+    private val setViewRangeFunction = reflectionWrapper.getFunction(displayClass, "setViewRange", listOf(Float::class),
+        Version.V_19.handleFunction("g") { setParameterClasses(Float::class) },
         Version.V_20.handleFunction("s") { setParameterClasses(Float::class) },
-        Version.V_20_FORGE.handleFunction("m_269215_") { setParameterClasses(Float::class) }
+        Version.V_20_2.handleFunction("b") { setParameterClasses(Float::class) },
+        Version.V_19_FORGE.handleFunction("m_269215_") { setParameterClasses(Float::class) }
     )
-    private val setShadowRadiusFunction = reflectionWrapper.getFunction(displayClass, "h", listOf(Float::class),
+    private val setShadowRadiusFunction = reflectionWrapper.getFunction(displayClass, "setShadowRadius", listOf(Float::class),
+        Version.V_19.handleFunction("h") { setParameterClasses(Float::class) },
         Version.V_20.handleFunction("t") { setParameterClasses(Float::class) },
-        Version.V_20_FORGE.handleFunction("m_269526_") { setParameterClasses(Float::class) }
+        Version.V_20_2.handleFunction("c") { setParameterClasses(Float::class) },
+        Version.V_19_FORGE.handleFunction("m_269526_") { setParameterClasses(Float::class) }
     )
 
     internal fun initializeLocation(virtualDisplay: AbstractVirtualDisplay, location: Location) {
@@ -131,8 +143,7 @@ class NmsDisplayService(
     }
 
     fun <T : NmsDisplayWrapper> getDisplayClass(type: HQDisplayType<T>): KClass<*> {
-        return reflectionWrapper.getNmsClass(
-            "Display\$${type::class.simpleName}",
+        return reflectionWrapper.getNmsClass("Display\$${type::class.simpleName}",
             Version.V_19.handle("world.entity")
         )
     }

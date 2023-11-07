@@ -12,8 +12,7 @@ sealed class HQBillboard(
 ) : NmsWrapper {
     companion object : KoinComponent {
         private val reflectionWrapper: NmsReflectionWrapper by inject()
-        internal val BillboardClass = reflectionWrapper.getNmsClass(
-            "Display\$BillboardConstraints",
+        internal val BillboardClass = reflectionWrapper.getNmsClass("Display\$BillboardConstraints",
             Version.V_19.handle("world.entity")
         )
         private val valueOfFunc = reflectionWrapper.getFunction(BillboardClass,
