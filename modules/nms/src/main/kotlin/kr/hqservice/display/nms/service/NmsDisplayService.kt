@@ -52,6 +52,7 @@ class NmsDisplayService(
     private val DATA_INTERPOLATION_DURATION_ID = reflectionWrapper.getStaticField(displayClass, "DATA_INTERPOLATION_DURATION_ID",
         Version.V_19.handle("r"),
         Version.V_20.handle("q"),
+        Version.V_20_2.handle("r"),
         Version.V_19_FORGE.handle("f_268449_"),
         Version.V_20_2_FORGE.handle("f_290650_")
     ).run {
@@ -61,6 +62,7 @@ class NmsDisplayService(
     private val DATA_INTERPOLATION_START_DELTA_TICKS_ID = reflectionWrapper.getStaticField(displayClass, "DATA_INTERPOLATION_START_DELTA_TICKS_ID",
         Version.V_19.handle("q"),
         Version.V_20.handle("p"),
+        Version.V_20_2.handle("q"),
         Version.V_19_FORGE.handle("f_276329_"),
         Version.V_20_2_FORGE.handle("f_291687_")
     ).run {
