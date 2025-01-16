@@ -47,6 +47,7 @@ class NmsDisplayService(
     private val getEntityDataFunction = reflectionWrapper.getFunction(displayClass, "getEntityData",
         Version.V_19.handle("aj"),
         Version.V_20_2.handle("al"),
+        Version.V_20_4.handle("an"),
         Version.V_19_FORGE.handle("m_20088_")
     )
     private val DATA_INTERPOLATION_DURATION_ID = reflectionWrapper.getStaticField(displayClass, "DATA_INTERPOLATION_DURATION_ID",

@@ -23,6 +23,7 @@ sealed class HQDisplayType<T : NmsDisplayWrapper>(
 
     object TextDisplay : HQDisplayType<NmsTextDisplayWrapper>(reflectionWrapper.getStaticField(EntityTypeClass, "TEXT_DISPLAY",
         Version.V_19.handleFunction("aX"),
+        Version.V_20_4.handleFunction("aY"),
         Version.V_19_FORGE.handleFunction("f_268607_")
     ).call()!!, NmsTextDisplayWrapper::class)
     //object ItemDisplay: HQDisplayType<NmsTextDisplayWrapper>(nmsValueOf("ITEM_DISPLAY"), NmsTextDisplayWrapper::class)
